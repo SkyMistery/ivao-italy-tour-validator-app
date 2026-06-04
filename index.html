@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ivao Italy Tour Validator — Download</title>
+  <style>
+    :root { color-scheme: dark; --blue:#3C55AC; --accent:#2EC662; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(1200px 600px at 50% -10%, #16203a 0%, #0a1020 60%); color: #d7e0ec;
+      display: flex; align-items: center; justify-content: center; padding: 32px 18px;
+    }
+    .card {
+      max-width: 620px; width: 100%; background: rgba(17,26,48,.7); border: 1px solid #25325a;
+      border-radius: 18px; padding: 36px 32px; box-shadow: 0 30px 80px -30px rgba(0,0,0,.7);
+    }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .glyph { font-size: 30px; color: #8fb4e8; }
+    h1 { margin: 0; font-size: 1.7rem; letter-spacing: 1px; }
+    .sub { color: #8b97b2; margin: 2px 0 0; font-size: .85rem; letter-spacing: 2px; }
+    p.lead { color: #b6c2d4; line-height: 1.6; margin: 22px 0; }
+    .dl {
+      display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
+      background: linear-gradient(180deg,#34c06a,#23a456); color: #06210f; font-weight: 800;
+      padding: 14px 24px; border-radius: 12px; font-size: 1.05rem; box-shadow: 0 8px 22px rgba(46,198,98,.35);
+    }
+    .dl[aria-disabled="true"] { opacity: .55; pointer-events: none; }
+    .meta { margin-top: 12px; font-size: .85rem; color: #7e8da3; }
+    .steps { margin: 26px 0 0; padding: 18px 20px; background: #0d1420; border: 1px solid #233248; border-radius: 12px; }
+    .steps h2 { font-size: .95rem; margin: 0 0 10px; color: #8fb4e8; }
+    .steps ol { margin: 0; padding-left: 20px; color: #b6c2d4; line-height: 1.7; }
+    code { background:#1b2740; border:1px solid #2c3c55; border-radius:6px; padding:1px 6px; font-size:.85em; }
+    a { color: #8fb4e8; }
+    .foot { margin-top: 22px; font-size: .8rem; color: #5b6573; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <span class="glyph">◈</span>
+      <div><h1>IVAO ITALY TOUR VALIDATOR</h1><p class="sub">VALIDAZIONE VOLI · TOUR</p></div>
+    </div>
+
+    <p class="lead">Strumento di validazione voli per tour IVAO. Scarica l'eseguibile per Windows,
+      fai doppio click e si apre nel browser. Nessuna installazione di Python richiesta.</p>
+
+    <a class="dl" id="downloadBtn" href="#" aria-disabled="true">⬇ Scarica per Windows</a>
+    <div class="meta" id="meta">Cerco l'ultima versione…</div>
+
+    <div class="steps">
+      <h2>Come si usa</h2>
+      <ol>
+        <li>Scarica <code>IvaoItalyTourValidator.exe</code> e mettilo in una cartella a piacere.</li>
+        <li>Doppio click: si apre una finestra e poi il browser su <code>localhost:8000</code>.</li>
+        <li>Per i voli reali servono le credenziali IVAO (⚙ Config); per provare usa "Carica volo demo".</li>
+        <li>Serve il database navdata di <b>Little Navmap</b> installato (rilevato in automatico).</li>
+      </ol>
+    </div>
+
+    <p class="foot">L'app controlla da sola se esce una versione più nuova e te lo segnala.
+      Windows potrebbe mostrare un avviso SmartScreen al primo avvio (file non firmato): "Ulteriori
+      informazioni" → "Esegui comunque".</p>
+  </div>
+
+  <script>
+    // ⚠️ Imposta qui il tuo repo PUBBLICO (quello che ospita le Release).
+    const REPO = "SkyMistery/ivao-italy-tour-validator-app";
+
+    (async function () {
+      const btn = document.getElementById("downloadBtn");
+      const meta = document.getElementById("meta");
+      try {
+        const r = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`, {
+          headers: { Accept: "application/vnd.github+json" },
+        });
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        const rel = await r.json();
+        const exe = (rel.assets || []).find((a) => /\.exe$/i.test(a.name));
+        if (exe) {
+          btn.href = exe.browser_download_url;
+          btn.removeAttribute("aria-disabled");
+          const mb = (exe.size / 1048576).toFixed(1);
+          const date = new Date(rel.published_at).toLocaleDateString("it-IT");
+          meta.innerHTML = `Versione <b>${rel.tag_name}</b> · ${mb} MB · ${date} · ` +
+            `<a href="${rel.html_url}" target="_blank" rel="noopener">note di rilascio</a>`;
+        } else {
+          btn.href = rel.html_url; btn.removeAttribute("aria-disabled");
+          meta.textContent = "Apri la pagina della release per il download.";
+        }
+      } catch (e) {
+        meta.innerHTML = `Nessuna release trovata. Vedi le <a href="https://github.com/${REPO}/releases" target="_blank" rel="noopener">release su GitHub</a>.`;
+        btn.href = `https://github.com/${REPO}/releases`; btn.removeAttribute("aria-disabled");
+      }
+    })();
+  </script>
+</body>
+</html>
