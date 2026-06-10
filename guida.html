@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ivao Italy Tour Validator — Guida all'uso</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== IVAO brand =====
+       Font:  Poppins (titoli) · Nunito Sans (testo)   — brand.ivao.aero/font
+       Colori: brand.ivao.aero/colors                                          */
+    :root {
+      --blue:        #0D2C99; /* Primary  · Blue       */
+      --light-blue:  #3C55AC; /* Secondary· Light Blue */
+      --sky:         #7EA2D6; /* Secondary· Blue       */
+      --cyan:        #B0F7FF; /* Secondary· Cyan       */
+      --green:       #2EC662; /* Secondary· Green      */
+      --yellow:      #F9CC2C; /* Secondary· Yellow     */
+      --orange:      #DF9221; /* Secondary· Orange     */
+      --red:         #E93434; /* Secondary· Red        */
+      --grey:        #D7D7DC; /* Primary  · Grey       */
+      --grey-2:      #D5D5D7; /* Secondary· Grey       */
+      --ink:         #15171A;
+      --muted:       #5b6573;
+      --bg:          #f4f6fb;
+      --card:        #ffffff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; color: var(--ink); background: var(--bg);
+      font-family: "Nunito Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.65;
+    }
+    h1, h2, h3, .brandfont { font-family: "Poppins", system-ui, sans-serif; }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code {
+      font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: .88em;
+      background: #eef1f8; border: 1px solid #dde3f0; border-radius: 6px; padding: 1px 6px; color: var(--light-blue);
+    }
+
+    header.top {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--light-blue) 100%);
+      color: #fff; padding: 38px 20px 30px;
+    }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+    header.top .wrap { padding: 0 20px; }
+    .logo { display: flex; align-items: center; gap: 14px; }
+    .logo .glyph {
+      width: 46px; height: 46px; border-radius: 12px; background: rgba(255,255,255,.14);
+      display: grid; place-items: center; font-size: 24px; border: 1px solid rgba(255,255,255,.25);
+    }
+    header.top h1 { margin: 0; font-size: 1.7rem; font-weight: 800; letter-spacing: .3px; }
+    header.top .sub { margin: 2px 0 0; font-size: .8rem; letter-spacing: 2.5px; color: var(--cyan); font-weight: 700; }
+    header.top p.lead { margin: 22px 0 0; max-width: 640px; color: #e7ecfb; }
+    .backdl {
+      display: inline-block; margin-top: 22px; background: #fff; color: var(--blue);
+      font-family: "Poppins", sans-serif; font-weight: 700; font-size: .92rem;
+      padding: 9px 18px; border-radius: 10px;
+    }
+
+    main { padding: 38px 0 60px; }
+    .toc {
+      background: var(--card); border: 1px solid #e3e8f2; border-radius: 14px; padding: 18px 22px;
+      margin-bottom: 34px;
+    }
+    .toc h2 { margin: 0 0 10px; font-size: .8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+    .toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 30px; }
+    .toc li { margin: 4px 0; }
+
+    section { margin: 0 0 36px; }
+    section > h2 {
+      font-size: 1.35rem; font-weight: 700; color: var(--blue); margin: 0 0 6px;
+      padding-bottom: 8px; border-bottom: 3px solid var(--grey);
+    }
+    section h3 { font-size: 1.05rem; font-weight: 600; margin: 22px 0 6px; color: var(--ink); }
+    ol, ul { padding-left: 22px; }
+    li { margin: 5px 0; }
+
+    .note, .tip, .warn {
+      border-radius: 12px; padding: 14px 18px; margin: 16px 0; border: 1px solid; font-size: .96rem;
+    }
+    .note { background: #eef4ff; border-color: #cfddfa; }
+    .tip  { background: #eafaf0; border-color: #bfe9cd; }
+    .warn { background: #fff4e8; border-color: #f6d6a8; }
+    .note b, .tip b, .warn b { font-family: "Poppins", sans-serif; }
+
+    .checks { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: .94rem; }
+    .checks th, .checks td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #e7ebf3; vertical-align: top; }
+    .checks th { font-family: "Poppins", sans-serif; color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: 1px; }
+    .checks td:first-child { font-weight: 700; color: var(--light-blue); white-space: nowrap; }
+
+    /* schede per-check */
+    .chk { border: 1px solid #e3e8f2; border-radius: 14px; padding: 16px 18px; margin: 14px 0; background: var(--card); }
+    .chk > .chk-h { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 0 0 6px; }
+    .chk .num {
+      font-family: "Poppins", sans-serif; font-weight: 800; font-size: .95rem; color: #fff;
+      background: var(--blue); border-radius: 8px; min-width: 30px; text-align: center; padding: 2px 8px;
+    }
+    .chk .nm { font-family: "Poppins", sans-serif; font-weight: 700; font-size: 1.05rem; }
+    .chk p { margin: 6px 0; }
+    .chk .tol {
+      margin-top: 8px; padding: 9px 12px; background: #f5f8ff; border: 1px solid #dde6f7;
+      border-left: 4px solid var(--light-blue); border-radius: 8px; font-size: .92rem;
+    }
+    .chk .tol b { font-family: "Poppins", sans-serif; color: var(--light-blue); }
+    .chk .outcomes { margin: 8px 0 0; font-size: .92rem; }
+    .pill { display:inline-block; font-family:"Poppins",sans-serif; font-weight:700; font-size:.72rem; padding:1px 8px; border-radius:14px; }
+    .pill.cfg { background: #eafaf0; color: #137a3b; border:1px solid #bfe9cd; }
+    .pill.fix { background: #f0f1f5; color: #4a5568; border:1px solid #d8dde7; }
+
+    .led { display: inline-block; padding: 1px 9px; border-radius: 20px; font-size: .78rem; font-weight: 700; font-family: "Poppins", sans-serif; }
+    .led.pass { background: var(--green); color: #06210f; }
+    .led.warn { background: var(--yellow); color: #3a2c00; }
+    .led.fail { background: var(--red); color: #fff; }
+    .led.info { background: var(--sky); color: #06214a; }
+
+    footer { border-top: 1px solid #e3e8f2; color: var(--muted); font-size: .85rem; padding: 24px 0 50px; }
+    footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+    @media (max-width: 620px) { .toc ol { columns: 1; } }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <div class="logo">
+        <div class="glyph">✈</div>
+        <div>
+          <h1>Ivao Italy Tour Validator</h1>
+          <p class="sub">GUIDA ALL'USO</p>
+        </div>
+      </div>
+      <p class="lead">Strumento locale per validare automaticamente i voli dei tour IVAO:
+        rotta, procedure, orari, livelli, velocità e altro — 14 controlli con report
+        <b>pass/fail</b> e un messaggio di feedback pronto per il pilota, con mappa e profilo verticale.</p>
+      <a class="backdl" href="./index.html">⬇ Vai al download</a>
+    </div>
+  </header>
+
+  <main>
+  <div class="wrap">
+
+    <nav class="toc">
+      <h2>Indice</h2>
+      <ol>
+        <li><a href="#cose">Cos'è</a></li>
+        <li><a href="#requisiti">Requisiti</a></li>
+        <li><a href="#installazione">Installazione</a></li>
+        <li><a href="#avvio">Primo avvio</a></li>
+        <li><a href="#dati">Cartella dati e config</a></li>
+        <li><a href="#navdata">Database navdata</a></li>
+        <li><a href="#credenziali">Credenziali IVAO (OAuth2)</a></li>
+        <li><a href="#bookmarklet">Il bookmarklet</a></li>
+        <li><a href="#demo">Provare subito (demo)</a></li>
+        <li><a href="#reale">Validare un volo reale</a></li>
+        <li><a href="#report">Leggere il report</a></li>
+        <li><a href="#mappa">Mappa e profilo</a></li>
+        <li><a href="#eurocontrol">Eurocontrol</a></li>
+        <li><a href="#opzionali">Funzioni opzionali</a></li>
+        <li><a href="#aggiornamenti">Aggiornamenti</a></li>
+        <li><a href="#problemi">Problemi comuni</a></li>
+      </ol>
+    </nav>
+
+    <section id="cose">
+      <h2>Cos'è</h2>
+      <p>Ivao Italy Tour Validator è un'applicazione per <b>Windows</b> pensata per lo staff IVAO.
+        Dato un volo di un tour, esegue automaticamente <b>14 controlli</b> e produce un report
+        dettagliato pass/fail, più un messaggio già pronto da inviare al pilota. Visualizza il volo
+        su una <b>mappa</b> (traccia reale contro rotta pianificata) e su un <b>profilo verticale</b>
+        (quota e velocità), evidenziando le tratte dove un controllo ha rilevato un problema.</p>
+      <p>L'app gira <b>in locale</b> sul tuo PC: avvia un piccolo server e apre l'interfaccia nel
+        browser su <code>http://localhost:8473</code>. Nessun dato viene pubblicato online.</p>
+    </section>
+
+    <section id="requisiti">
+      <h2>Requisiti</h2>
+      <ul>
+        <li><b>Windows</b> 10 o 11.</li>
+        <li>Il database navdata di <b>Little Navmap</b> installato (vedi <a href="#navdata">Database navdata</a>).</li>
+        <li><b>Credenziali IVAO</b> (OAuth2) — servono <i>solo</i> per importare voli reali, non per la demo.</li>
+        <li>Connessione internet (per dati IVAO, vento e validazione Eurocontrol).</li>
+      </ul>
+      <div class="note">Non serve installare Python: l'eseguibile è autonomo. Python è richiesto
+        solo se attivi le <a href="#opzionali">funzioni opzionali</a>.</div>
+    </section>
+
+    <section id="installazione">
+      <h2>Installazione</h2>
+      <p>Dalla <a href="./index.html">pagina di download</a> scegli una delle due opzioni:</p>
+      <h3>Installer (consigliato)</h3>
+      <ol>
+        <li>Scarica <code>IvaoItalyTourValidator-Setup.exe</code>.</li>
+        <li>Avvialo: scegli la cartella e, se vuoi, i collegamenti su <b>desktop</b> / <b>menu Start</b>.</li>
+        <li>Installazione <b>per utente</b> (non servono diritti di amministratore).</li>
+        <li>Durante l'installazione puoi spuntare le <a href="#opzionali">funzioni opzionali</a>.</li>
+      </ol>
+      <h3>Eseguibile portatile</h3>
+      <p>In alternativa scarica <code>IvaoItalyTourValidator.exe</code> e mettilo in una cartella a
+        piacere. Al primo avvio crea accanto a sé una cartella <code>IvaoItalyTourValidator-data</code>
+        con configurazione, log e tour.</p>
+      <div class="warn"><b>Avviso SmartScreen.</b> Al primo avvio Windows può mostrare un avviso
+        (file non firmato): clicca <b>«Ulteriori informazioni» → «Esegui comunque»</b>.</div>
+    </section>
+
+    <section id="avvio">
+      <h2>Primo avvio</h2>
+      <ol>
+        <li>Avvia l'app: si apre una finestra e poi il browser su <code>http://localhost:8473</code>.</li>
+        <li>Apri <b>⚙ Impostazioni</b> e verifica il <b>provider navdata</b> e il percorso del DB.</li>
+        <li>Premi <b>Test DB</b>: deve rispondere <b>OK</b> (vedi <a href="#navdata">sotto</a>).</li>
+        <li>Per i voli reali, inserisci le <b>credenziali IVAO</b> nel file <code>config.json</code>
+          (vedi <a href="#credenziali">Credenziali IVAO (OAuth2)</a>).</li>
+      </ol>
+      <p>Per chiudere l'app basta chiudere la finestra del programma; il browser può restare aperto.</p>
+    </section>
+
+    <section id="dati">
+      <h2>Cartella dati e config</h2>
+      <p>L'app tiene i tuoi dati — <code>config.json</code>, log e tour — in una cartella chiamata
+        <b><code>IvaoItalyTourValidator-data</code></b>. Qui trovi e modifichi il
+        <a href="#credenziali">file delle credenziali</a>.</p>
+      <p>Di default questa cartella si trova nella tua area utente di Windows
+        (<b>AppData</b>), accanto al programma installato. Per aprirla velocemente:</p>
+      <ol>
+        <li>Premi <b>Win + R</b> (si apre «Esegui»).</li>
+        <li>Incolla <code>%LOCALAPPDATA%</code> e premi <b>Invio</b>.</li>
+        <li>Apri la cartella del programma e poi <code>IvaoItalyTourValidator-data</code>.</li>
+      </ol>
+      <div class="note">Se invece usi l'<b>eseguibile portatile</b>, la cartella
+        <code>IvaoItalyTourValidator-data</code> viene creata <b>accanto all'exe</b>, nella stessa
+        cartella dove l'hai messo.</div>
+    </section>
+
+    <section id="navdata">
+      <h2>Database navdata</h2>
+      <p>I dati di rotte e procedure vengono letti dal database di <b>Little Navmap</b>. Se hai
+        Little Navmap installato, l'app cerca il database da sola nella sua cartella:</p>
+      <p><code>%APPDATA%\ABarthel\little_navmap_db\</code></p>
+      <p>Se la cartella è altrove, indicane il percorso in <b>⚙ Impostazioni → percorso navdata</b> e
+        premi <b>Test DB</b>.</p>
+      <div class="tip"><b>Suggerimento.</b> Il database è gestito e aggiornato da Little Navmap:
+        l'app lo legge soltanto, non lo modifica.</div>
+    </section>
+
+    <section id="credenziali">
+      <h2>Credenziali IVAO (OAuth2)</h2>
+      <p>Per <b>importare voli reali</b> servono delle credenziali OAuth2 (un <code>client id</code> e un
+        <code>client secret</code>) che ottieni gratuitamente dal portale sviluppatori IVAO. Per la
+        sola <a href="#demo">demo</a> non servono.</p>
+
+      <h3>1. Crea l'applicazione su IVAO</h3>
+      <ol>
+        <li>Vai su <a href="https://developers.ivao.aero/" target="_blank" rel="noopener">developers.ivao.aero</a>
+          ed effettua il <b>login</b> con il tuo account IVAO.</li>
+        <li>Clicca <b>Create new app</b>.</li>
+        <li>Inserisci un <b>nome</b> per l'applicazione e premi <b>Submit</b>.</li>
+        <li>Copia il <b>Client ID</b> e il <b>Client Secret</b> mostrati.</li>
+      </ol>
+      <div class="warn"><b>Tieni segreto il Client Secret.</b> Va trattato come una password: non
+        condividerlo né pubblicarlo.</div>
+
+      <h3>2. Incolla le credenziali nel <code>config.json</code></h3>
+      <p>Al momento le credenziali <b>non</b> si inseriscono dall'interfaccia: vanno scritte
+        direttamente nel file di configurazione. Lo trovi accanto all'eseguibile, nella cartella dei
+        dati:</p>
+      <p><code>IvaoItalyTourValidator-data\config.json</code></p>
+      <p>Aprilo con un editor di testo (es. Blocco note) e compila i due campi:</p>
+      <pre style="background:#0d1530;color:#e7ecfb;border-radius:12px;padding:16px 18px;overflow:auto;font-family:ui-monospace,Consolas,monospace;font-size:.88rem;line-height:1.5;"><code style="background:none;border:none;color:inherit;padding:0;">{
+  "ivao_client_id": "<span style="color:#F9CC2C">il-tuo-client-id</span>",
+  "ivao_client_secret": "<span style="color:#F9CC2C">il-tuo-client-secret</span>"
+}</code></pre>
+      <p>Salva il file e <b>riavvia l'app</b>. Da quel momento puoi importare i voli reali.</p>
+      <div class="note">Il <code>config.json</code> resta solo sul tuo PC: le credenziali non vengono
+        mai caricate online né scritte nei log.</div>
+    </section>
+
+    <section id="bookmarklet">
+      <h2>Il bookmarklet (importare le leg)</h2>
+      <p>Il <b>bookmarklet</b> è un segnalibro speciale: dalla pagina di validazione di una leg sul
+        sito Tours di IVAO, con un clic invia i dati del volo a questa app, che poi scarica rotta e
+        traccia da IVAO. Va installato una volta sola.</p>
+
+      <h3>1. Installa il bookmarklet (una volta)</h3>
+      <ol>
+        <li>Mostra la <b>barra dei preferiti</b> del browser con <b>Ctrl + Shift + B</b>.</li>
+        <li>Nell'app, in alto, clicca il pulsante <b>📥 Bookmarklet</b>: si apre la pagina di
+          installazione.</li>
+        <li><b>Trascina</b> il bottone <b>«Importa Leg IVAO»</b> dalla pagina sulla barra dei
+          preferiti.</li>
+        <li>Se il trascinamento non funziona, usa <b>«Copia codice»</b> nella stessa pagina e crea un
+          nuovo segnalibro a mano incollando quel codice come <b>URL</b> (il nome può essere
+          «Importa Leg IVAO»).</li>
+      </ol>
+
+      <h3>2. Usa il bookmarklet</h3>
+      <ol>
+        <li>Tieni l'<b>app aperta</b>.</li>
+        <li>Sul sito IVAO, apri la pagina di <b>validazione della leg</b> (quella che mostra
+          User / Leg / Flight-Date), già loggato.</li>
+        <li>Clicca il segnalibro <b>«Importa Leg IVAO»</b> sulla barra dei preferiti.</li>
+        <li>L'app si <b>apre (o passa in primo piano)</b> e avvia l'import: se c'è un solo volo lo
+          carica, se ce ne sono più di uno mostra la <b>selezione</b>. Poi premi <b>▶ VALIDA</b>.</li>
+      </ol>
+      <div class="warn"><b>Se non succede nulla:</b> assicurati di essere sulla pagina di dettaglio
+        della leg (deve mostrare User / Leg / Flight-Date) e che l'app sia in esecuzione. Se il
+        browser blocca l'apertura, comparirà un avviso con il link da aprire a mano.</div>
+    </section>
+
+    <section id="demo">
+      <h2>Provare subito (senza credenziali)</h2>
+      <p>Per esplorare tutto senza account IVAO:</p>
+      <ol>
+        <li>Clicca <b>▷ Carica volo demo</b>: viene generato un volo sintetico LIRF → LIML.</li>
+        <li>Clicca <b>▶ VALIDA</b>.</li>
+        <li>Esplora i 14 controlli, il messaggio per il pilota, la mappa e il profilo verticale.</li>
+      </ol>
+    </section>
+
+    <section id="reale">
+      <h2>Validare un volo reale</h2>
+      <ol>
+        <li>Assicurati di aver inserito le <b>credenziali IVAO</b> nel <code>config.json</code>
+          (vedi <a href="#credenziali">Credenziali IVAO (OAuth2)</a>).</li>
+        <li>Usa il <a href="#bookmarklet"><b>bookmarklet</b></a> dalla pagina di validazione della leg
+          sul sito IVAO per importare i dati nell'app (l'app cerca il volo corrispondente).</li>
+        <li>Se la sessione ha più segmenti o più piani di volo, l'app te lo segnala: scegli/unisci
+          le sessioni e l'app valida <b>l'ultimo piano inviato entro il decollo</b>.</li>
+        <li>Premi <b>▶ VALIDA</b> per eseguire i 14 controlli.</li>
+      </ol>
+      <div class="note">La validazione mostra i <b>progressi a schermo</b>: le celle dei controlli
+        si aggiornano una per una mentre il calcolo procede.</div>
+    </section>
+
+    <section id="report">
+      <h2>Leggere il report — i 14 controlli</h2>
+      <p>Ogni controllo ha un esito a LED:
+        <span class="led pass">PASS</span> rispettato ·
+        <span class="led warn">WARNING</span> dubbio/tollerato ·
+        <span class="led fail">FAIL</span> violato ·
+        <span class="led info">INFO</span> solo informativo.
+        Cliccando una cella si apre il dettaglio e si evidenzia la tratta interessata su mappa e profilo.</p>
+      <p>Le tolleranze marcate <span class="pill cfg">REGOLABILE</span> si modificano dall'app
+        (<b>⚖ Regole</b>, generali o per singolo tour); quelle <span class="pill fix">FISSA</span>
+        sono standard ICAO impostate nell'app. I valori qui sotto sono i <b>default</b>.</p>
+
+      <div class="chk">
+        <div class="chk-h"><span class="num">1</span><span class="nm">Orario</span></div>
+        <p>Confronta il <b>decollo reale</b> (wheels-off, ricavato dal track) con l'orario di decollo
+          <b>dichiarato</b> dal pilota (TOF) sulla pagina Tours.</p>
+        <div class="tol"><b>Tolleranza:</b> scarto massimo <b>30 minuti</b>
+          (<code>timing_tolerance_minutes</code>) <span class="pill cfg">REGOLABILE</span></div>
+        <p class="outcomes"><b>Esiti:</b> entro tolleranza <span class="led pass">PASS</span> ·
+          oltre <span class="led fail">FAIL</span> · TOF non dichiarato <span class="led pass">PASS</span> ·
+          decollo non determinabile <span class="led warn">WARNING</span>.</p>
+      </div>
+
+      <div class="chk">
+        <div class="chk-h"><span class="num">2</span><span class="nm">Disconnessioni</span></div>
+        <p>Cerca i <b>buchi temporali</b> nel track (segno di disconnessione/riconnessione).</p>
+        <div class="tol"><b>Tolleranza:</b> gap massimo <b>2 minuti</b>
+          (<code>disconnect_tolerance_minutes</code>) <span class="pill cfg">REGOLABILE</span>,
+          con <b>+15 s</b> di margine fisso per il jitter di campionamento.</div>
+        <p class="outcomes"><b>Esiti:</b> nessun gap <span class="led pass">PASS</span> ·
+          gap solo a terra <span class="led warn">WARNING</span> ·
+          almeno un gap in volo <span class="led fail">FAIL</span>.</p>
+      </div>
+
+      <div class="chk">
+        <div class="chk-h"><span class="num">3</span><span class="nm">Callsign</span></div>
+        <p>Verifica che il callsign combaci con almeno uno dei <b>pattern ammessi dal tour</b>
+          (wildcard stile glob, es. <code>ITA*</code> accetta <code>ITA123</code>; case-insensitive).</p>
+        <div class="tol"><b>Tolleranza:</b> nessuna — è un match esatto sui pattern. I pattern si
+          definiscono per tour <span class="pill cfg">REGOLABILE</span></div>
+        <p class="outcomes"><b>Esiti:</b> combacia <span class="led pass">PASS</span> ·
+          non combacia <span class="led fail">FAIL</span> ·
+          tour senza pattern <span class="led info">SKIPPED</span> (non applicabile).</p>
+      </div>
+
+      <div class="chk">
+        <div class="chk-h"><span class="num">4</span><span class="nm">Alternato</span></div>
+        <p>Controlla la presenza dell'<b>aeroporto alternato</b> nel piano e ne riporta la distanza
+          dalla destinazione (a titolo informativo).</p>
+        <div class="tol"><b>Tolleranza:</b> nessun limite di distanza applicato. L'obbligo
+          dell'alternato è una proprietà del tour <span class="pill cfg">REGOLABILE</span></div>
+        <p class="outcomes"><b>Esiti:</b> non richiesto, o richiesto e presente
+          <span class="led pass">PASS</span> · obbligatorio ma mancante
+          <span class="led fail">FAIL</span>.</p>
+      </div>
+
+      <div class="chk">
+        <div class="chk-h"><span class="num">5</span><span class="nm">Parcheggio</span></div>
+        <p>Verifica il tempo fermo al parcheggio <b>prima del rullaggio</b> e <b>dopo l'atterraggio</b>
+          (anti «connect-and-go»). Il movimento è rilevato quando la GS supera la soglia.</p>
+        <div class="tol"><b>Tolleranze:</b> pre-volo ≥ <b>5 min</b>
+          (<code>min_parking_time_pre_minutes</code>), post-volo ≥ <b>3 min</b>
+          (<code>min_parking_time_post_minutes</code>); soglia di movimento <b>2 kt</b>
+          (<code>parking_gs_threshold_kt</code>). <span class="pill cfg">REGOLABILE</span></div>
+        <p class="outcomes"><b>Esiti:</b> entrambi i minimi rispettati <span class="led pass">PASS</span> ·
+          uno sotto il minimo <span class="led fail">FAIL</span> ·
+          track assente <span class="led warn">WARNING</span> (il post non è giudicato se il
+          touchdown non è determinabile).</p>
+      </div>
+
+      <div class="chk">
+        <div class="chk-h"><span class="num">6</span><span class="nm">Eurocontrol</span></div>
+        <p>Valida il <b>piano ICAO</b> sul portale NM (manuale o automatico — vedi
+          <a href="#eurocontrol">la sezione dedicata</a>).</p>
+        <div class="tol"><b>Tolleranza:</b> nessuna — l'esito è quello del validatore Eurocontrol.</div>
+        <p class="outcomes"><b>Esiti:</b> finché non validato <span class="led info">INFO</span> ·
+          nessun errore <span class="led pass">PASS</span> · errori
+          <span class="led fail">FAIL</span>.</p>
+      </div>
+
+      <div class="chk">
+        <div class="chk-h"><span class="num">7</span><span class="nm">Rotta e procedure</span></div>
+        <p>Confronta col track i quattro tratti del piano — <b>SID</b>, <b>rotta en-route</b>,
+          <b>STAR</b> e <b>approccio</b> — ognuno con la sua tolleranza di scostamento laterale.
+          I waypoint/tratte fuori tolleranza sono evidenziati sulla mappa.</p>
+        <div class="tol"><b>Tolleranze (scostamento laterale):</b> SID <b>2,0 NM</b>
+          (<code>max_deviation_sid_nm</code>), rotta <b>5,0 NM</b>
+          (<code>max_deviation_route_nm</code>), STAR <b>2,0 NM</b>
+          (<code>max_deviation_star_nm</code>), approccio <b>1,5 NM</b>
+          (<code>max_deviation_approach_nm</code>). <span class="pill cfg">REGOLABILE</span></div>
+        <p class="outcomes"><b>Esiti:</b> deviazione su <b>procedura</b> (SID/STAR/APP)
+          <span class="led fail">FAIL</span> · deviazione su <b>rotta en-route</b>
+          <span class="led warn">WARNING</span> · tutto entro tolleranza
+          <span class="led pass">PASS</span>.</p>
+      </div>
+
+      <div class="chk">
+        <div class="chk-h"><span class="num">8</span><span class="nm">Livelli FL</span></div>
+        <p>Per il <b>livello iniziale di crociera</b> e per ogni <b>step-climb</b> dichiarato in rotta
+          (<code>FIX/SPEEDFL</code>) verifica che il FL pianificato sia stato <b>raggiunto e
+          mantenuto</b>. Le quote sono valutate in pressure altitude (QNE).</p>
+        <div class="tol"><b>Tolleranze:</b> banda di quota <b>±200 ft</b> attorno al FL
+          (standard ICAO); permanenza minima al livello <b>5 min</b>.
+          <span class="pill fix">FISSA</span></div>
+        <p class="outcomes"><b>Esiti (mai FAIL):</b> raggiunto e mantenuto ≥ 5 min
+          <span class="led pass">PASS</span> · raggiunto ma mantenuto meno, oppure non raggiunto
+          <span class="led warn">WARNING</span>.</p>
+      </div>
+
+      <div class="chk">
+        <div class="chk-h"><span class="num">9</span><span class="nm">250 kt sotto FL100</span></div>
+        <p>Sotto FL100 stima la <b>IAS</b> di ogni punto e la confronta col limite di 250 kt
+          (IAS reale dal vento se attivo, altrimenti GS con correzione di densità ISA).</p>
+        <div class="tol"><b>Tolleranza:</b> margine <b>10 kt</b> sopra i 250 kt
+          (<code>speed_250_tolerance_kt</code>) <span class="pill cfg">REGOLABILE</span>, a cui si
+          somma l'incertezza-vento. Nei <b>1000 ft</b> appena sotto FL100 (9000–10000 ft) il
+          superamento resta sempre solo warning. <span class="pill fix">FISSA</span></div>
+        <p class="outcomes"><b>Esiti:</b> entro 250 kt <span class="led pass">PASS</span> ·
+          superamento entro tolleranza+incertezza <span class="led warn">WARNING</span> ·
+          oltre <span class="led fail">FAIL</span>.</p>
+      </div>
+
+      <div class="chk">
+        <div class="chk-h"><span class="num">10</span><span class="nm">Procedure (velocità/quota)</span></div>
+        <p>Sulle legs di SID/STAR/APP che pubblicano un <b>vincolo</b> di velocità o quota, verifica
+          che il track lo rispetti nel punto di attraversamento. Sono valutate solo le legs
+          effettivamente sorvolate (entro la tolleranza di scostamento del check 7).</p>
+        <div class="tol"><b>Tolleranze:</b> quota <b>±200 ft</b> sui vincoli
+          (AT / AT_OR_ABOVE / AT_OR_BELOW / BETWEEN); velocità <b>±10 kt</b> + incertezza-vento.
+          <span class="pill fix">FISSA</span></div>
+        <p class="outcomes"><b>Esiti:</b> vincoli rispettati <span class="led pass">PASS</span> ·
+          velocità oltre il limite ma entro margine <span class="led warn">WARNING</span> ·
+          quota violata, o velocità oltre margine+incertezza <span class="led fail">FAIL</span> ·
+          nessuna leg vincolata sorvolata <span class="led info">INFO</span>.</p>
+      </div>
+
+      <div class="chk">
+        <div class="chk-h"><span class="num">11</span><span class="nm">Rateo di discesa</span></div>
+        <p>Cerca le <b>discese troppo ripide</b> (ft/min) tra punti consecutivi in volo. I segmenti
+          oltre il limite sono evidenziati sul profilo.</p>
+        <div class="tol"><b>Tolleranza:</b> rateo massimo <b>2000 ft/min</b>
+          (<code>max_descent_rate_fpm</code>) <span class="pill cfg">REGOLABILE</span></div>
+        <p class="outcomes"><b>Esiti:</b> tutto sotto il limite <span class="led pass">PASS</span> ·
+          almeno un segmento oltre <span class="led fail">FAIL</span>.</p>
+      </div>
+
+      <div class="chk">
+        <div class="chk-h"><span class="num">12</span><span class="nm">Copertura ATC</span></div>
+        <p>Calcola la <b>% di rotta</b> coperta da un ATC connesso e pertinente alla fase di volo
+          (point-in-polygon sui settori). Opzionale: si attiva col toggle ATC.</p>
+        <div class="tol"><b>Tolleranza:</b> nessuna soglia pass/fail (è informativo). Filtri di
+          pertinenza per quota/posizione: TWR fino a <b>3000 ft AGL</b> e vicino all'aeroporto,
+          APP/DEP sotto <b>FL250</b>, CTR/FIR/FSS ovunque. <span class="pill fix">FISSA</span></div>
+        <p class="outcomes"><b>Esiti:</b> sempre <span class="led info">INFO</span> ·
+          archiver irraggiungibile <span class="led warn">WARNING</span> (senza bloccare gli altri).</p>
+      </div>
+
+      <div class="chk">
+        <div class="chk-h"><span class="num">13</span><span class="nm">TORA</span></div>
+        <p>Riporta la <b>TORA</b> nota della pista di partenza (da un DB locale curato dagli operatori)
+          e, se possibile, la distanza tra il punto di rotazione e la soglia (per stimare i decolli
+          da intersezione).</p>
+        <div class="tol"><b>Tolleranza:</b> nessuna — è puramente informativo.</div>
+        <p class="outcomes"><b>Esiti:</b> sempre <span class="led info">INFO</span> (anche quando non
+          ci sono dati TORA per l'aeroporto).</p>
+      </div>
+
+      <div class="chk">
+        <div class="chk-h"><span class="num">14</span><span class="nm">Equipaggiamento (Equipment / PBN)</span></div>
+        <p>Verifica l'<b>equipaggiamento ICAO</b> (campo 10) e le capacità <b>PBN</b> (campo 18)
+          rispetto a quota e procedure volate.</p>
+        <div class="tol"><b>Requisiti — sempre obbligatori (FAIL se mancano):</b> equipment
+          <code>S</code>, <code>G</code>, <code>Y</code>, <code>R</code>, <code>D</code>; transponder
+          <b>Mode S</b> (campo 10b); PBN <code>Bx</code> (RNAV 5). <b>Condizionali deterministici
+          (FAIL):</b> <code>W</code> se crociera stabile in banda <b>RVSM FL290–FL410</b>.
+          <span class="pill cfg">REGOLABILE</span></div>
+        <div class="tol"><b>Condizionali (WARNING):</b> <code>J</code> (datalink/CPDLC) se crociera
+          stabile <b>sopra FL285</b>; PBN dedotto dalle procedure: <code>Dx</code> se SID/STAR RNAV,
+          <code>Ox</code> se STAR RNP, <code>Sx</code> se avvicinamento RNP, <code>Tx</code> se
+          l'avvicinamento contiene legs <b>Radius-to-Fix (RF)</b>. Più i controlli di coerenza
+          campo 10 ↔ campo 18 (R/PBN, sensore GNSS). <span class="pill fix">FISSA</span></div>
+        <p class="outcomes"><b>Esiti:</b> requisiti obbligatori mancanti
+          <span class="led fail">FAIL</span> · requisiti condizionali/coerenza
+          <span class="led warn">WARNING</span> · tutto conforme <span class="led pass">PASS</span>.
+          Se il tipo procedura non è determinabile dal navdata, il relativo requisito PBN è
+          <b>non valutato</b> (nessun falso FAIL).</p>
+      </div>
+
+      <h3>Messaggio per il pilota</h3>
+      <p>Dopo la validazione, l'app genera un messaggio di feedback (italiano o inglese) riassuntivo,
+        pronto da copiare e inviare al pilota.</p>
+
+      <!-- ============================================================= -->
+      <!-- ▼▼▼  SCRIVI QUI le tue note aggiuntive sui controlli  ▼▼▼     -->
+      <!-- Esempio: deroghe del tuo gruppo, esempi reali, FAQ sui check. -->
+      <!-- Aggiungi paragrafi <p>…</p> o un <div class="note">…</div>.    -->
+      <!--
+      <div class="note"><b>Nota del team:</b> scrivi qui le tue indicazioni…</div>
+      -->
+      <!-- ▲▲▲  fine area note aggiuntive  ▲▲▲                           -->
+      <!-- ============================================================= -->
+    </section>
+
+    <section id="mappa">
+      <h2>Mappa e profilo verticale</h2>
+      <ul>
+        <li><b>Mappa:</b> traccia reale, rotta pianificata (dep → SID → rotta → STAR → APP → arr),
+          aeroporti e disconnessioni. Con il toggle ATC, anche i settori e la rotta coperta
+          (<span style="color:var(--green);font-weight:700">verde</span>) / scoperta (grigio tratteggiato).</li>
+        <li><b>Profilo verticale:</b> quota e velocità reali (GS/TAS/IAS) con i vincoli di quota
+          delle procedure.</li>
+        <li><b>Evidenziazione:</b> le tratte in errore restano in tono tenue; cliccando una cella
+          check vengono enfatizzate. <span style="color:var(--red);font-weight:700">Rosso</span> =
+          errore, <span style="color:var(--orange);font-weight:700">ambra</span> = avviso.</li>
+      </ul>
+    </section>
+
+    <section id="eurocontrol">
+      <h2>Validazione Eurocontrol (check 6)</h2>
+      <p>Il piano ICAO viene impaginato sui campi standard in 6 righe. Puoi validarlo in due modi:</p>
+      <ul>
+        <li><b>Manuale:</b> usa <b>Copia tutto</b> e incolla il piano nel <i>Free Text Editor</i> del
+          portale NM, poi registra l'esito nell'app.</li>
+        <li><b>Automatico</b> (opzionale): l'app apre un browser pilotato, incolla il piano e legge i
+          risultati. Nessun errore → check 6 <span class="led pass">verde</span>; errori → check 6
+          <span class="led fail">rosso</span> con la finestra lasciata aperta sui risultati.</li>
+      </ul>
+      <div class="note">La modalità automatica richiede la funzione opzionale <b>Eurocontrol /
+        Playwright</b> (vedi sotto). Senza, resta sempre disponibile il flusso manuale.</div>
+    </section>
+
+    <section id="opzionali">
+      <h2>Funzioni opzionali</h2>
+      <p>Non incluse nell'eseguibile per tenerlo leggero; attivabili in qualsiasi momento
+        <b>senza ricompilare</b>. Richiedono Python installato sul PC (l'installer può scaricarlo).</p>
+      <ul>
+        <li><b>Eurocontrol automatico</b> — spunta la casella nell'installer oppure lancia
+          <code>Installa-Eurocontrol-Playwright.bat</code> accanto all'exe.</li>
+        <li><b>Meteo GFS</b> (fallback vento NOAA) — casella nell'installer oppure
+          <code>Installa-Meteo-GFS.bat</code>.</li>
+      </ul>
+      <p>Le dipendenze finiscono in <code>IvaoItalyTourValidator-data\pylibs</code> e l'app le
+        carica da sola all'avvio successivo.</p>
+    </section>
+
+    <section id="aggiornamenti">
+      <h2>Aggiornamenti e tour condivisi</h2>
+      <ul>
+        <li><b>Aggiornamenti:</b> l'app controlla da sola se esce una versione più nuova e mostra un
+          banner. Scarica la nuova versione dalla <a href="./index.html">pagina di download</a>.</li>
+        <li><b>Tour condivisi:</b> l'app scarica una lista di tour comune; puoi anche crearne di
+          locali. Pulsante <b>⟳ Sync tour</b> per aggiornarli. I tour scaricati sono in sola lettura;
+          per personalizzarne uno, duplicalo con un id diverso.</li>
+      </ul>
+    </section>
+
+    <section id="problemi">
+      <h2>Problemi comuni</h2>
+      <h3>Windows blocca l'avvio (SmartScreen)</h3>
+      <p>File non firmato: <b>«Ulteriori informazioni» → «Esegui comunque»</b>.</p>
+      <h3>«Test DB» non dà OK</h3>
+      <p>Verifica che Little Navmap sia installato e che il percorso in <b>⚙ Impostazioni</b> punti
+        alla cartella del database di Little Navmap (vedi <a href="#navdata">Database navdata</a>).</p>
+      <h3>Non riesco a importare voli reali</h3>
+      <p>Servono credenziali IVAO valide nel <code>config.json</code> (vedi
+        <a href="#credenziali">Credenziali IVAO (OAuth2)</a>); ricordati di <b>riavviare l'app</b>
+        dopo averle inserite. Per provare l'app senza account usa <b>▷ Carica volo demo</b>.</p>
+      <h3>La validazione Eurocontrol automatica non parte</h3>
+      <p>Installa la funzione opzionale Eurocontrol/Playwright (vedi sopra). Nel frattempo usa il
+        flusso manuale con <b>Copia tutto</b>.</p>
+      <h3>Dove sono i log?</h3>
+      <p>Accanto all'exe, in <code>IvaoItalyTourValidator-data\logs\app.log</code>. Dall'app: pulsante
+        <b>▤</b> nella barra in alto.</p>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- ▼▼▼  AREA LIBERA — aggiungi qui nuove sezioni tutte tue  ▼▼▼       -->
+    <!-- Copia il blocco <section> qui sotto, cambia id/titolo/contenuto,   -->
+    <!-- e (facoltativo) aggiungi la voce nell'indice in cima alla pagina   -->
+    <!-- (cerca <nav class="toc">) con <li><a href="#tuo-id">Titolo</a></li>.-->
+    <!--
+    <section id="tuo-id">
+      <h2>Il tuo titolo</h2>
+      <p>Il tuo testo. Usa <b>grassetto</b>, <code>codice</code>, elenchi &lt;ul&gt;/&lt;ol&gt;.</p>
+      <div class="note">Riquadro blu informativo.</div>
+      <div class="tip">Riquadro verde suggerimento.</div>
+      <div class="warn">Riquadro arancio avviso.</div>
+    </section>
+    -->
+    <!-- ▲▲▲  fine area libera  ▲▲▲                                        -->
+    <!-- ================================================================= -->
+
+  </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>Ivao Italy Tour Validator — guida all'uso</span>
+      <span><a href="./index.html">Download</a> · IVAO™ è un marchio di IVAO Foundation</span>
+    </div>
+  </footer>
+</body>
+</html>

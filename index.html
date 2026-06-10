@@ -4,64 +4,120 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ivao Italy Tour Validator — Download</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
-    :root { color-scheme: dark; --blue:#3C55AC; --accent:#2EC662; }
+    /* ===== IVAO brand =====
+       Font:  Poppins (titoli) · Nunito Sans (testo)   — brand.ivao.aero/font
+       Colori: brand.ivao.aero/colors                                          */
+    :root {
+      --blue:       #0D2C99; /* Primary  · Blue       */
+      --light-blue: #3C55AC; /* Secondary· Light Blue */
+      --sky:        #7EA2D6; /* Secondary· Blue       */
+      --cyan:       #B0F7FF; /* Secondary· Cyan       */
+      --green:      #2EC662; /* Secondary· Green      */
+      --grey:       #D7D7DC; /* Primary  · Grey       */
+      --ink:        #15171A;
+      --muted:      #5b6573;
+      --bg:         #f4f6fb;
+      --card:       #ffffff;
+    }
     * { box-sizing: border-box; }
     body {
-      margin: 0; min-height: 100vh; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-      background: radial-gradient(1200px 600px at 50% -10%, #16203a 0%, #0a1020 60%); color: #d7e0ec;
-      display: flex; align-items: center; justify-content: center; padding: 32px 18px;
+      margin: 0; min-height: 100vh; color: var(--ink);
+      font-family: "Nunito Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background:
+        radial-gradient(900px 500px at 50% -8%, rgba(13,44,153,.10) 0%, rgba(13,44,153,0) 60%),
+        var(--bg);
+      display: flex; align-items: center; justify-content: center; padding: 40px 18px;
     }
+    h1, h2, .brandfont { font-family: "Poppins", system-ui, sans-serif; }
+    a { color: var(--blue); }
+
     .card {
-      max-width: 620px; width: 100%; background: rgba(17,26,48,.7); border: 1px solid #25325a;
-      border-radius: 18px; padding: 36px 32px; box-shadow: 0 30px 80px -30px rgba(0,0,0,.7);
+      max-width: 640px; width: 100%; background: var(--card);
+      border: 1px solid #e3e8f2; border-radius: 20px; padding: 0; overflow: hidden;
+      box-shadow: 0 30px 80px -34px rgba(13,44,153,.45);
     }
-    .logo { display: flex; align-items: center; gap: 12px; }
-    .glyph { font-size: 30px; color: #8fb4e8; }
-    h1 { margin: 0; font-size: 1.7rem; letter-spacing: 1px; }
-    .sub { color: #8b97b2; margin: 2px 0 0; font-size: .85rem; letter-spacing: 2px; }
-    p.lead { color: #b6c2d4; line-height: 1.6; margin: 22px 0; }
+    .head {
+      background: linear-gradient(135deg, var(--blue) 0%, var(--light-blue) 100%);
+      color: #fff; padding: 30px 32px 26px;
+    }
+    .logo { display: flex; align-items: center; gap: 14px; }
+    .glyph {
+      width: 48px; height: 48px; border-radius: 13px; background: rgba(255,255,255,.14);
+      display: grid; place-items: center; font-size: 26px; border: 1px solid rgba(255,255,255,.25);
+    }
+    h1 { margin: 0; font-size: 1.55rem; font-weight: 800; letter-spacing: .3px; }
+    .sub { color: var(--cyan); margin: 3px 0 0; font-size: .78rem; letter-spacing: 2.5px; font-weight: 700; }
+
+    .body { padding: 28px 32px 34px; }
+    p.lead { color: #2a3550; line-height: 1.65; margin: 0 0 24px; }
+
     .dl {
       display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
-      background: linear-gradient(180deg,#34c06a,#23a456); color: #06210f; font-weight: 800;
-      padding: 14px 24px; border-radius: 12px; font-size: 1.05rem; box-shadow: 0 8px 22px rgba(46,198,98,.35);
+      background: linear-gradient(180deg, #34d473, var(--green)); color: #06210f;
+      font-family: "Poppins", sans-serif; font-weight: 700;
+      padding: 14px 26px; border-radius: 12px; font-size: 1.05rem;
+      box-shadow: 0 10px 24px rgba(46,198,98,.35);
     }
     .dl[aria-disabled="true"] { opacity: .55; pointer-events: none; }
-    .meta { margin-top: 12px; font-size: .85rem; color: #7e8da3; }
-    .steps { margin: 26px 0 0; padding: 18px 20px; background: #0d1420; border: 1px solid #233248; border-radius: 12px; }
-    .steps h2 { font-size: .95rem; margin: 0 0 10px; color: #8fb4e8; }
-    .steps ol { margin: 0; padding-left: 20px; color: #b6c2d4; line-height: 1.7; }
-    code { background:#1b2740; border:1px solid #2c3c55; border-radius:6px; padding:1px 6px; font-size:.85em; }
-    a { color: #8fb4e8; }
-    .foot { margin-top: 22px; font-size: .8rem; color: #5b6573; }
+    .meta { margin-top: 12px; font-size: .88rem; color: var(--muted); }
+    .meta b { color: var(--ink); }
+
+    .guide {
+      display: inline-flex; align-items: center; gap: 8px; margin-top: 18px;
+      text-decoration: none; font-family: "Poppins", sans-serif; font-weight: 700; font-size: .92rem;
+      color: var(--blue); border: 2px solid var(--blue); border-radius: 11px; padding: 9px 18px;
+    }
+    .guide:hover { background: var(--blue); color: #fff; }
+
+    .steps { margin: 28px 0 0; padding: 20px 22px; background: #f0f3fb; border: 1px solid #dde4f2; border-radius: 14px; }
+    .steps h2 { font-family: "Poppins", sans-serif; font-size: .82rem; letter-spacing: 1.5px; text-transform: uppercase; margin: 0 0 10px; color: var(--light-blue); }
+    .steps ol { margin: 0; padding-left: 20px; color: #2a3550; line-height: 1.7; }
+    code { font-family: ui-monospace, Consolas, monospace; background:#e8edf8; border:1px solid #d6deef; border-radius:6px; padding:1px 6px; font-size:.85em; color: var(--light-blue); }
+
+    .foot { margin-top: 22px; font-size: .82rem; color: var(--muted); line-height: 1.6; }
   </style>
 </head>
 <body>
   <div class="card">
-    <div class="logo">
-      <span class="glyph">◈</span>
-      <div><h1>IVAO ITALY TOUR VALIDATOR</h1><p class="sub">VALIDAZIONE VOLI · TOUR</p></div>
+    <div class="head">
+      <div class="logo">
+        <span class="glyph">✈</span>
+        <div><h1>Ivao Italy Tour Validator</h1><p class="sub">VALIDAZIONE VOLI · TOUR</p></div>
+      </div>
     </div>
 
-    <p class="lead">Strumento di validazione voli per tour IVAO. Scarica l'eseguibile per Windows,
-      fai doppio click e si apre nel browser. Nessuna installazione di Python richiesta.</p>
+    <div class="body">
+      <p class="lead">Strumento di validazione voli per i tour IVAO. Scarica l'<b>installer</b> per
+        Windows, scegli la cartella e (se vuoi) i collegamenti su desktop / menu Start. Nessuna
+        installazione di Python richiesta. In alternativa c'è l'eseguibile portatile.</p>
 
-    <a class="dl" id="downloadBtn" href="#" aria-disabled="true">⬇ Scarica per Windows</a>
-    <div class="meta" id="meta">Cerco l'ultima versione…</div>
+      <a class="dl" id="downloadBtn" href="#" aria-disabled="true">⬇ Scarica l'installer</a>
+      <div class="meta" id="meta">Cerco l'ultima versione…</div>
+      <div class="meta" id="portable"></div>
 
-    <div class="steps">
-      <h2>Come si usa</h2>
-      <ol>
-        <li>Scarica <code>IvaoItalyTourValidator.exe</code> e mettilo in una cartella a piacere.</li>
-        <li>Doppio click: si apre una finestra e poi il browser su <code>localhost:8000</code>.</li>
-        <li>Per i voli reali servono le credenziali IVAO (⚙ Config); per provare usa "Carica volo demo".</li>
-        <li>Serve il database navdata di <b>Little Navmap</b> installato (rilevato in automatico).</li>
-      </ol>
+      <div><a class="guide" href="./guida.html">📖 Guida all'uso</a></div>
+
+      <div class="steps">
+        <h2>Come si usa — in breve</h2>
+        <ol>
+          <li>Scarica e avvia <code>IvaoItalyTourValidator-Setup.exe</code> (oppure l'exe portatile in una cartella a piacere).</li>
+          <li>Avvia l'app: si apre una finestra e poi il browser su <code>localhost:8473</code>.</li>
+          <li>Per i voli reali servono le credenziali IVAO nel <code>config.json</code> (vedi <a href="./guida.html#credenziali">guida</a>); per provare usa <b>«▷ Carica volo demo»</b>.</li>
+          <li>Serve il database navdata di <b>Little Navmap</b> installato (rilevato in automatico).</li>
+          <li><b>Opzionale:</b> in installazione puoi attivare l'auto-validazione Eurocontrol e il meteo GFS.</li>
+        </ol>
+        <p style="margin:12px 0 0;font-size:.9rem;color:var(--muted)">Tutti i dettagli nella
+          <a href="./guida.html">guida completa</a>.</p>
+      </div>
+
+      <p class="foot">L'app controlla da sola se esce una versione più nuova e te lo segnala.
+        Windows potrebbe mostrare un avviso SmartScreen al primo avvio (file non firmato):
+        <b>«Ulteriori informazioni» → «Esegui comunque»</b>.</p>
     </div>
-
-    <p class="foot">L'app controlla da sola se esce una versione più nuova e te lo segnala.
-      Windows potrebbe mostrare un avviso SmartScreen al primo avvio (file non firmato): "Ulteriori
-      informazioni" → "Esegui comunque".</p>
   </div>
 
   <script>
@@ -77,14 +133,24 @@
         });
         if (!r.ok) throw new Error("HTTP " + r.status);
         const rel = await r.json();
-        const exe = (rel.assets || []).find((a) => /\.exe$/i.test(a.name));
-        if (exe) {
-          btn.href = exe.browser_download_url;
+        const assets = rel.assets || [];
+        // Preferisci l'installer (…-Setup.exe); l'exe portatile è il fallback/secondo link.
+        const setup = assets.find((a) => /setup\.exe$/i.test(a.name));
+        const portable = assets.find((a) => /\.exe$/i.test(a.name) && !/setup\.exe$/i.test(a.name));
+        const primary = setup || portable;
+        if (primary) {
+          btn.href = primary.browser_download_url;
+          btn.textContent = setup ? "⬇ Scarica l'installer" : "⬇ Scarica (portatile)";
           btn.removeAttribute("aria-disabled");
-          const mb = (exe.size / 1048576).toFixed(1);
+          const mb = (primary.size / 1048576).toFixed(1);
           const date = new Date(rel.published_at).toLocaleDateString("it-IT");
           meta.innerHTML = `Versione <b>${rel.tag_name}</b> · ${mb} MB · ${date} · ` +
             `<a href="${rel.html_url}" target="_blank" rel="noopener">note di rilascio</a>`;
+          if (setup && portable) {
+            document.getElementById("portable").innerHTML =
+              `Oppure l'<a href="${portable.browser_download_url}">eseguibile portatile</a> ` +
+              `(${(portable.size / 1048576).toFixed(1)} MB, senza installazione).`;
+          }
         } else {
           btn.href = rel.html_url; btn.removeAttribute("aria-disabled");
           meta.textContent = "Apri la pagina della release per il download.";
