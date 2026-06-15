@@ -134,8 +134,9 @@
         </div>
       </div>
       <p class="lead">Strumento locale per validare automaticamente i voli dei tour IVAO:
-        rotta, procedure, orari, livelli, velocità e altro — 14 controlli con report
-        <b>pass/fail</b> e un messaggio di feedback pronto per il pilota, con mappa e profilo verticale.</p>
+        rotta, procedure, orari, livelli, velocità, punti e spazi aerei VFR e altro — fino a
+        <b>17 controlli</b> (IFR e VFR) con report <b>pass/fail</b> e un messaggio di feedback pronto
+        per il pilota, con mappa e profilo verticale.</p>
       <a class="backdl" href="./index.html">⬇ Vai al download</a>
     </div>
   </header>
@@ -168,8 +169,9 @@
     <section id="cose">
       <h2>Cos'è</h2>
       <p>Ivao Italy Tour Validator è un'applicazione per <b>Windows</b> pensata per lo staff IVAO.
-        Dato un volo di un tour, esegue automaticamente <b>14 controlli</b> e produce un report
-        dettagliato pass/fail, più un messaggio già pronto da inviare al pilota. Visualizza il volo
+        Dato un volo di un tour, esegue automaticamente <b>fino a 17 controlli</b> (quali dipende dal
+        fatto che il volo sia IFR o VFR) e produce un report dettagliato pass/fail, più un messaggio
+        già pronto da inviare al pilota. Visualizza il volo
         su una <b>mappa</b> (traccia reale contro rotta pianificata) e su un <b>profilo verticale</b>
         (quota e velocità), evidenziando le tratte dove un controllo ha rilevato un problema.</p>
       <p>L'app gira <b>in locale</b> sul tuo PC: avvia un piccolo server e apre l'interfaccia nel
@@ -316,7 +318,7 @@
       <ol>
         <li>Clicca <b>▷ Carica volo demo</b>: viene generato un volo sintetico LIRF → LIML.</li>
         <li>Clicca <b>▶ VALIDA</b>.</li>
-        <li>Esplora i 14 controlli, il messaggio per il pilota, la mappa e il profilo verticale.</li>
+        <li>Esplora i controlli, il messaggio per il pilota, la mappa e il profilo verticale.</li>
       </ol>
     </section>
 
@@ -329,14 +331,20 @@
           sul sito IVAO per importare i dati nell'app (l'app cerca il volo corrispondente).</li>
         <li>Se la sessione ha più segmenti o più piani di volo, l'app te lo segnala: scegli/unisci
           le sessioni e l'app valida <b>l'ultimo piano inviato entro il decollo</b>.</li>
-        <li>Premi <b>▶ VALIDA</b> per eseguire i 14 controlli.</li>
+        <li>Premi <b>▶ VALIDA</b> per eseguire i controlli (IFR o VFR a seconda del piano).</li>
       </ol>
       <div class="note">La validazione mostra i <b>progressi a schermo</b>: le celle dei controlli
         si aggiornano una per una mentre il calcolo procede.</div>
     </section>
 
     <section id="report">
-      <h2>Leggere il report — i 14 controlli</h2>
+      <h2>Leggere il report — i controlli</h2>
+      <div class="note"><b>IFR o VFR?</b> I controlli dipendono dalla <b>regola di volo</b> del piano
+        (campo 8): un volo <b>IFR</b> esegue i controlli <b>1–14</b>; un volo <b>VFR</b> esegue quelli
+        generali (1, 2, 3, 5, 9, 11, 12) <b>più i tre controlli VFR</b> (15, 16, 17), mentre i
+        controlli specifici IFR (4, 6, 7, 8, 10, 14, inclusa Eurocontrol) <b>non vengono eseguiti</b>;
+        i voli <b>Y/Z</b> (parte IFR + parte VFR) eseguono entrambi gli insiemi, ognuno sul proprio
+        tratto. I controlli non eseguiti semplicemente non compaiono nella griglia.</div>
       <p>Ogni controllo ha un esito a LED:
         <span class="led pass">PASS</span> rispettato ·
         <span class="led warn">WARNING</span> dubbio/tollerato ·
@@ -521,6 +529,60 @@
           <span class="led warn">WARNING</span> · tutto conforme <span class="led pass">PASS</span>.
           Se il tipo procedura non è determinabile dal navdata, il relativo requisito PBN è
           <b>non valutato</b> (nessun falso FAIL).</p>
+      </div>
+
+      <h3>Controlli VFR (voli VFR e parte VFR di Y/Z)</h3>
+      <p>Questi tre controlli si attivano solo per i voli <b>VFR</b> e per il <b>tratto VFR</b> dei
+        voli <b>Y/Z</b>. Per i voli IFR non vengono eseguiti.</p>
+
+      <div class="chk">
+        <div class="chk-h"><span class="num">15</span><span class="nm">Punti VFR</span></div>
+        <p>Verifica che la traccia passi vicino ai <b>punti riporto VFR (VRP)</b> dichiarati nel piano
+          — riconosciuti per <b>nome località</b> (es. «Torre del Greco») o <b>codice</b> (es.
+          «RNSE3») — e ai <b>radioaiuti</b> (VOR/NDB) eventualmente citati nel tratto VFR.</p>
+        <div class="tol"><b>Tolleranza:</b> il punto è considerato sorvolato entro <b>20 NM</b> dalla
+          traccia (in VFR la rotta è indicativa). <span class="pill fix">FISSA</span></div>
+        <p class="outcomes"><b>Esiti:</b> punto sorvolato entro 20 NM <span class="led pass">PASS</span> ·
+          dichiarato ma non sorvolato <span class="led warn">WARNING</span> · riferimenti non
+          riconosciuti come punti pubblicati <span class="led info">INFO</span> (elencati, non
+          penalizzano) · nessun punto pubblicato nel piano <span class="led info">INFO</span>.</p>
+        <div class="warn"><b>Limiti.</b> Sono validati <b>solo i punti pubblicati</b> nel database
+          Navigraph: i riferimenti «liberi» dei piloti (paesi, monti, laghi, fiumi non pubblicati)
+          non vengono verificati e restano come nota informativa. La tolleranza ampia (20 NM) è
+          voluta: non rileva scostamenti più piccoli.</div>
+      </div>
+
+      <div class="chk">
+        <div class="chk-h"><span class="num">16</span><span class="nm">Quote VFR</span></div>
+        <p>Controlla due cose sul tratto VFR: il <b>tetto VFR</b> (non si deve salire sopra
+          <b>FL195</b>) e i <b>livelli di crociera semicircolari</b> (sopra 3000 ft AGL la quota deve
+          rispettare la regola: rotta 0–179° → migliaia dispari + 500 ft, es. 3500/5500; 180–359° →
+          migliaia pari + 500 ft, es. 4500/6500). Sotto 3000 ft dal terreno: esente.</p>
+        <div class="tol"><b>Tolleranze:</b> tetto <b>FL195</b>; banda <b>±200 ft</b> attorno alla quota
+          semicircolare; esenzione sotto <b>3000 ft AGL</b>. <span class="pill fix">FISSA</span></div>
+        <p class="outcomes"><b>Esiti:</b> tutto regolare <span class="led pass">PASS</span> ·
+          livello semicircolare errato <span class="led warn">WARNING</span> · tetto FL195 superato
+          <span class="led fail">FAIL</span>.</p>
+        <div class="warn"><b>Limiti.</b> L'altezza dal suolo (AGL) usata per l'esenzione è stimata da
+          un terreno <b>a maglia larga</b> (offline) che tende a <b>sovrastimare il rilievo</b>: in
+          zone montane il controllo semicircolare può non essere valutato. La direzione usa la rotta
+          <i>vera</i> (la differenza con quella magnetica è di pochi gradi nella nostra area).</div>
+      </div>
+
+      <div class="chk">
+        <div class="chk-h"><span class="num">17</span><span class="nm">Spazi aerei</span></div>
+        <p>Controlla se la traccia <b>attraversa</b> aree vietate/regolamentate o zone controllate,
+          confrontando anche la quota con i limiti verticali dell'area.</p>
+        <div class="tol"><b>Tolleranza:</b> nessuna soglia regolabile; attivabile/disattivabile con
+          <code>airspace_check_enabled</code>. <span class="pill cfg">REGOLABILE</span></div>
+        <p class="outcomes"><b>Esiti:</b> nessuna penetrazione <span class="led pass">PASS</span> ·
+          ingresso in aree <b>P</b> (proibite), <b>R</b> (regolamentate) o <b>D</b> (pericolose)
+          <span class="led fail">FAIL</span> · transito in <b>CTR/TMA</b> (zone controllate)
+          → nota <span class="led info">INFO</span>.</p>
+        <div class="warn"><b>Limiti.</b> Il transito in zone controllate è <b>solo informativo</b>:
+          in VFR può essere legittimo se autorizzato, e l'app non conosce la clearance ATC reale.
+          I FIR/UIR (enormi, attraversati da ogni volo) sono esclusi. I dati dipendono
+          dall'aggiornamento del database Navigraph.</div>
       </div>
 
       <h3>Messaggio per il pilota</h3>
